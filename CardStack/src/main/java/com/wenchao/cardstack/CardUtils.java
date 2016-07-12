@@ -6,10 +6,10 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 public class CardUtils {
-    final static int DIRECTION_TOP_LEFT = 0;
-    final static int DIRECTION_TOP_RIGHT = 1;
-    final static int DIRECTION_BOTTOM_LEFT = 2;
-    final static int DIRECTION_BOTTOM_RIGHT = 3;
+  final static int LEFT = 0;
+  final static int TOP = 1;
+  final static int RIGHT = 2;
+  final static int BOTTOM = 3;
 
     public static void scale(View v, int pixel){
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)v.getLayoutParams();
@@ -31,19 +31,41 @@ public class CardUtils {
         return params;
     }
 
-    public static void move(View v, int upDown,int leftRight){
-        RelativeLayout.LayoutParams params = getMoveParams(v,upDown,leftRight);
-        v.setLayoutParams(params);
-    }
+
+  public static LayoutParams getMoveParamsUpDown(View v, int upDown) {
+    RelativeLayout.LayoutParams original = (RelativeLayout.LayoutParams) v.getLayoutParams();
+    RelativeLayout.LayoutParams params = cloneParams(original);
+    params.topMargin += upDown;
+    params.bottomMargin -= upDown;
+    return params;
+  }
+
+
+  public static LayoutParams getMoveParamsLeftRight(View v, int leftRight) {
+    RelativeLayout.LayoutParams original = (RelativeLayout.LayoutParams) v.getLayoutParams();
+    RelativeLayout.LayoutParams params = cloneParams(original);
+    params.leftMargin += leftRight;
+    params.rightMargin -= leftRight;
+    return params;
+  }
+
+  public static void move(View v, int upDown,int leftRight){
+    RelativeLayout.LayoutParams params = getMoveParams(v,upDown,leftRight);
+    v.setLayoutParams(params);
+  }
 
     public static LayoutParams scaleFrom(View v, LayoutParams params, int pixel) {
-        Log.d("pixel", "onScroll: " + pixel);
+        if(BuildConfig.DEBUG){
+           Log.d("pixel", "onScroll: " + pixel);
+        }
         params = cloneParams(params);
         params.leftMargin -= pixel;
         params.rightMargin -= pixel;
         params.topMargin -= pixel;
         params.bottomMargin -= pixel;
-        Log.d("pixel", "onScroll: " + pixel);
+        if(BuildConfig.DEBUG){
+           Log.d("pixel", "onScroll: " + pixel);
+         }
         v.setLayoutParams(params);
 
         return params;
@@ -82,21 +104,30 @@ public class CardUtils {
         return (float) Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
     }
 
-    public static int direction(float x1, float y1, float x2, float y2) {
-        if(x2>x1){//RIGHT
-            if(y2>y1){//BOTTOM
-                return DIRECTION_BOTTOM_RIGHT;
-            }else{//TOP
-                return DIRECTION_TOP_RIGHT;
-            }
-        }else{//LEFT
-            if(y2>y1){//BOTTOM
-                return DIRECTION_BOTTOM_LEFT;
-            }else{//TOP
-                return DIRECTION_TOP_LEFT;
-            }
-        }
+  public static int direction(float x1, float y1, float x2, float y2) {
+    float dX = Math.abs(x2 - x1);
+    float dY = Math.abs(y2 - y1);
+
+    if (dX > dY) {
+      //HORIZONTAL
+      if (x1 > x2) {
+        //LEFT
+        return 0;
+      } else {
+        //RIGHT
+        return 2;
+      }
+    } else {
+      //VERTICAL
+      if (y1 > y2) {
+        //UP
+        return 1;
+      } else {
+        //DOWN
+        return 3;
+      }
     }
+  }
 
 
 }

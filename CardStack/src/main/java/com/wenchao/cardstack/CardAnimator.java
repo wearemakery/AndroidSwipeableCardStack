@@ -1,25 +1,28 @@
 package com.wenchao.cardstack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
-import com.wenchao.animation.RelativeLayoutParamsEvaluator;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.wenchao.animation.RelativeLayoutParamsEvaluator;
 
-import static com.wenchao.cardstack.CardUtils.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.wenchao.cardstack.CardUtils.cloneParams;
+import static com.wenchao.cardstack.CardUtils.getMoveParamsLeftRight;
+import static com.wenchao.cardstack.CardUtils.getMoveParamsUpDown;
+import static com.wenchao.cardstack.CardUtils.move;
+import static com.wenchao.cardstack.CardUtils.moveFrom;
+import static com.wenchao.cardstack.CardUtils.scale;
+import static com.wenchao.cardstack.CardUtils.scaleFrom;
 
 public class CardAnimator{
     private static final String DEBUG_TAG = "CardAnimator";
@@ -88,10 +91,10 @@ public class CardAnimator{
 
     private void setupRemotes(){
         View topView = getTopView();
-        mRemoteLayouts[0] = getMoveParams(topView, REMOTE_DISTANCE, -REMOTE_DISTANCE);
-        mRemoteLayouts[1] = getMoveParams(topView, REMOTE_DISTANCE, REMOTE_DISTANCE);
-        mRemoteLayouts[2] = getMoveParams(topView, -REMOTE_DISTANCE, -REMOTE_DISTANCE);
-        mRemoteLayouts[3] = getMoveParams(topView, -REMOTE_DISTANCE, REMOTE_DISTANCE);
+        mRemoteLayouts[0] = getMoveParamsLeftRight(topView,-REMOTE_DISTANCE);
+        mRemoteLayouts[1] = getMoveParamsUpDown(topView,-REMOTE_DISTANCE);
+        mRemoteLayouts[2] = getMoveParamsLeftRight(topView,REMOTE_DISTANCE);
+        mRemoteLayouts[3] = getMoveParamsUpDown(topView,REMOTE_DISTANCE);
 
     }
 

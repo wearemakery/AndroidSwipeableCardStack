@@ -35,7 +35,9 @@ public class DragGestureDetector {
         int action = MotionEventCompat.getActionMasked(event);
         switch(action) {
             case (MotionEvent.ACTION_UP) :
-                Log.d(DEBUG_TAG,"Action was UP");
+                if(BuildConfig.DEBUG){
+                  Log.d(DEBUG_TAG,"Action was UP");
+                }
                 if(mStarted) {
                     mListener.onDragEnd(mOriginalEvent, event);
                 }
